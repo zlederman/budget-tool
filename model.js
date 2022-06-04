@@ -37,13 +37,6 @@ budgetEntry.methods.confirm = function confirm(){
     `
     return response
 }
-async function funMoney(Budget) {
-    const funDocs = await Budget.aggregate([{$match : {purchaseType : 'fun'}}])
-    let cost = 0
-    for await (const doc of funDocs) {
-        cost += doc.purchaseCost
-    }
-    console.log(cost)
-}
+
 
 module.exports = mongoose.model("budgetEntry",budgetEntry)
