@@ -29,7 +29,7 @@ const validateSms = (sms) => {
     return false
 }
 
-const writeResponse = (res) =>{
+const writeResponse = (res,str) =>{
     const twiml = new MessagingResponse()
     twiml.message('Incorrect Budget Entry');
     res.writeHead(200, {'Content-Type': 'text/xml'});
@@ -40,7 +40,7 @@ router.post('/sms',async (req,res)=>{
     let splitSms;
     let response;
     if(!validateSms(req.body.Body)){
-        writeResponse('Malformed Response')
+        writeResponse(res,'Malformed Response')
         return
     }
     splitSms = req.body.Body.split(',')
@@ -50,7 +50,7 @@ router.post('/sms',async (req,res)=>{
     else{
         response = await addEntry(splitSms)
     }
-    writeResponse(response)
+    writeResponse(res,response)
 })
 
 
