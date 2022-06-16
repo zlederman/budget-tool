@@ -2,7 +2,6 @@ const express = require('express')
 const router = express.Router();
 const path = require('path');
 const bodyParser = require('body-parser');
-const { twiml } = require('twilio');
 const MessagingResponse = require('twilio').twiml.MessagingResponse
 router.use(bodyParser.urlencoded({ extended: false}));
 
@@ -31,6 +30,7 @@ const validateSms = (sms) => {
 }
 
 const writeResponse = (res) =>{
+    const twiml = new MessagingResponse()
     twiml.message('Incorrect Budget Entry');
     res.writeHead(200, {'Content-Type': 'text/xml'});
     res.end(twiml.toString());
