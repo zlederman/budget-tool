@@ -5,7 +5,7 @@ const app = express()
 const smsRoute = require('./routes/sms.route')
 require('dotenv').config()
 
-const uri = `mongodb+srv://eigenShmector:MSHi6ykok6fRZt@cluster0.kgaoe.mongodb.net/db?retryWrites=true&w=majority`;
+const uri = `mongodb+srv://${process.env.USER}:${process.env.PASS}@cluster0.kgaoe.mongodb.net/db?retryWrites=true&w=majority`;
 mongoose.connect(uri,{ 
         useNewUrlParser: true,
         useUnifiedTopology: true })
