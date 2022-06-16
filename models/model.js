@@ -7,7 +7,7 @@ const budgetEntry = new Schema({
     purchaseName : String,
     purchaseType : {
         type : String,
-        enum : ['investment','fun','accessory','essential'],
+        enum : ['investment','fun','accessory','essential','food'],
         default : 'accessory',
         required : true
     },

@@ -3,10 +3,9 @@ const http = require('http')
 const mongoose = require("mongoose");
 var bodyParser = require('body-parser');
 // const { GoogleSpreadsheet } = require('google-spreadsheet');
-const budgetEntryModel = require('./model.js')
+const budgetEntryModel = require('../models/model.js')
 const MessagingResponse = require('twilio').twiml.MessagingResponse
-const getTotal = require('./budget-funcs').getTotal
-var weeklyBudget = require('./budget-funcs').weeklyBudget
+const getTotal = require('../controllers/budget.controller').getTotal
 const app = express()
 require('dotenv').config()
 app.use(bodyParser.urlencoded({ extended: false}));
@@ -31,7 +30,7 @@ function smsValidator(sms){
     if(sms.indexOf(",") == -1){
         throw new invalidSMSException()
     }
-    sms = sms.toLowerCase().replace(" ","")
+
     let cmdArr = sms.split(",");
     if(cmdArr.length != 3 && cmdArr[0] == 'total'){
         //this is getting total spending
@@ -54,14 +53,18 @@ const getBudgetInfo = async (budgetEntryParams,budgetEntryModel) => {
 }
 const addEntry = async (budgetEntryParams,budgetEntryModel) => {
     const newEntry = new budgetEntryModel({
-        purchaseName : budgetEntryParams[0],
-        purchaseType : budgetEntryParams[1],
+        purchaseName : budgetEntryParams[0], 
+        purchaseType : sanitizeKeyWord(budgetEntryParams[1]), //sanitize type enum
         purchaseCost : budgetEntryParams[2],
-        purchaseMethod : budgetEntryParams[3],
+        purchaseMethod : sanitizeKeyWord(budgetEntryParams[3]), //sanitize payment method enum
         purchaseDate : Date.now()
     })
     await newEntry.save()
     return await newEntry.confirm()
+}
+
+const sanitizeKeyWord = (keyword) => {
+    return keyWord.toLowerCase().replace(" ","")
 }
 
 function setWeekly(weeklyBudget,key,newBudget){
@@ -72,6 +75,7 @@ function setWeekly(weeklyBudget,key,newBudget){
 
 app.post('/sms',async (req,res)=>{
     const twiml = new MessagingResponse();
+    console.log(req.url)
     let budgetStr = req.body.Body
     let budgetEntryParams = null
     let resStr = "Command Not Defined"
@@ -104,7 +108,6 @@ app.post('/sms',async (req,res)=>{
 
 
 http.createServer(app).listen(80,async ()=>{
-
     console.log('Express is up!')
 })
 

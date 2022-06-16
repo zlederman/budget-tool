@@ -24,11 +24,4 @@ const getTotal = async (BudgetObj,ptype,dateRange)=> {
     return `you spent $${cost} on ${ptype} this ${dateRange}`
 }
 
-var weeklyBudget = {
-    'investment' : 0,
-    'fun': 0,
-    'accessory': 0 ,
-    'essential': 0  
-}
 module.exports.getTotal = getTotal
-module.exports.weeklyBudget = weeklyBudget
