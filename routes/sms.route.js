@@ -4,13 +4,15 @@ const path = require('path');
 const bodyParser = require('body-parser');
 const { twiml } = require('twilio');
 const MessagingResponse = require('twilio').twiml.MessagingResponse
+router.use(bodyParser.urlencoded({ extended: false}));
 
 const budgetController = require('../controllers/budget.controller')
-const entryController  = require('../controllers/sms.controller');
+const addEntry  = require('../controllers/sms.controller');
 const { write } = require('fs');
 
 const expenseEntryRegex = new RegExp('[\\w]*,[\\w]*,\\$(\\d+|\\d+.\\d+),[\\w]+')
 const totalRequestRegex = new RegExp('total,[\\w]*,[\\w]*')
+
 const validateSms = (sms) => {
     /*
      * checks if the string is mal-formed
@@ -34,7 +36,7 @@ const writeResponse = (res) =>{
     res.end(twiml.toString());
     return
 }
-router.post('/sms',(req,res)=>{
+router.post('/sms',async (req,res)=>{
     let splitSms;
     let response;
     if(!validateSms(req.body.Body)){
@@ -43,11 +45,14 @@ router.post('/sms',(req,res)=>{
     }
     splitSms = req.body.Body.split(',')
     if(splitSms[0] == 'total'){
-        writeResponse(await budgetController.getTotal(splitSms))
+        response = await budgetController.getTotal(splitSms)
     }
     else{
-        writeResponse(await entryController.add(splitSms))
+        response = await addEntry(splitSms)
     }
+    writeResponse(response)
 })
 
-export 
+
+// router.get('/total')
+module.exports = router

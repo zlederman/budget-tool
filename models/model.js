@@ -9,13 +9,15 @@ const budgetEntry = new Schema({
         type : String,
         enum : ['investment','fun','accessory','essential','food'],
         default : 'accessory',
+        message: 'X',
         required : true
     },
     purchaseCost : Number,
     purchaseMethod : {
         type : String,
         enum : ['debit','credit','cash'],
-        required:  true
+        required:  true,
+        message: 'X'
     },
     purchaseDate : {
         type: Date,
@@ -32,10 +34,15 @@ budgetEntry.path('purchaseCost').set((v)=>{
 })
 
 budgetEntry.methods.confirm = function confirm(){
-    const response = `
-    you just purchased ${this.purchaseName}
-    `
-    return response
+    if(this.purchaseType == 'X'){ 
+        return 'purchase type not accepted'
+    }
+    if(this.purchaseMethod == 'X'){
+        return 'purchase method not accepted'
+    }
+    return `you just purchased ${this.purchaseName}`
+    
+  
 }
 
 
