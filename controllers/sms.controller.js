@@ -3,7 +3,7 @@
 budgetEntryModel = require('../models/model')
 
 
-const addEntry = async (budgetEntryParams,budgetEntryModel) => {
+const addEntry = async (budgetEntryParams) => {
     const newEntry = new budgetEntryModel({
         purchaseName : budgetEntryParams[0], 
         purchaseType : sanitizeKeyWord(budgetEntryParams[1]), //sanitize type enum
