@@ -31,7 +31,7 @@ const validateSms = (sms) => {
 
 const writeResponse = (res,str) =>{
     const twiml = new MessagingResponse()
-    twiml.message('Incorrect Budget Entry');
+    twiml.message(str);
     res.writeHead(200, {'Content-Type': 'text/xml'});
     res.end(twiml.toString());
     return
