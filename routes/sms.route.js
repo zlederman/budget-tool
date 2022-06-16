@@ -2,37 +2,37 @@ const express = require('express')
 const router = express.Router();
 const path = require('path');
 const bodyParser = require('body-parser');
+const MessagingResponse = require('twilio').twiml.MessagingResponse
 
 
+const expenseEntryRegex = new RegExp('[\\w]*,[\\w]*,\\$(\\d+|\\d+.\\d+),[\\w]+')
+const totalRequestRegex = new RegExp('total,[\\w]*,[\\w]*')
 const validateSms = (sms) => {
     /*
      * checks if the string is mal-formed
      * checks if there are enough params
     */
     if(typeof sms == undefined) {
-        throw new invalidSMSException()
-        return
+        return false
     }
-    if(sms.indexOf(",") == -1){
-        throw new invalidSMSException()
+    if(expenseEntryRegex.test(sms)){
+        return true
     }
-
-    let cmdArr = sms.split(",");
-    if(cmdArr.length != 3 && cmdArr[0] == 'total'){
-        //this is getting total spending
-        throw new invalidSMSException()
+    if(totalRequestRegex.test(sms)){
+        return true
     }
-    else if(cmdArr.length < 4 && cmdArr[0] != 'total'){
-        // this is a budget entry
-        throw new invalidSMSException()
-    }
-
-    return cmdArr
+    return false
 }
 
 
 router.post('/sms',(req,res)=>{
-    validateSms(req.body.Body)
+    if(!validateSms(req.body.Body)){
+        res.send("")
+    }
+    
     
 })
-module.exports = router;
+
+
+console.log(validateSms('test ass,fart,$20,credit'))
+console.log(validateSms('test,xxx,1234,'))
