@@ -19,6 +19,4 @@ const sanitizeKeyWord = (keyWord) => {
     return keyWord.toLowerCase().replace(" ","")
 }
 
-module.exports = {
-    addEntry
-}
+module.exports = addEntry
