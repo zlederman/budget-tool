@@ -2,8 +2,12 @@ const express = require('express')
 const router = express.Router();
 const path = require('path');
 const bodyParser = require('body-parser');
+const { twiml } = require('twilio');
 const MessagingResponse = require('twilio').twiml.MessagingResponse
 
+const budgetController = require('../controllers/budget.controller')
+const entryController  = require('../controllers/sms.controller');
+const { write } = require('fs');
 
 const expenseEntryRegex = new RegExp('[\\w]*,[\\w]*,\\$(\\d+|\\d+.\\d+),[\\w]+')
 const totalRequestRegex = new RegExp('total,[\\w]*,[\\w]*')
@@ -24,15 +28,26 @@ const validateSms = (sms) => {
     return false
 }
 
-
+const writeResponse = (res) =>{
+    twiml.message('Incorrect Budget Entry');
+    res.writeHead(200, {'Content-Type': 'text/xml'});
+    res.end(twiml.toString());
+    return
+}
 router.post('/sms',(req,res)=>{
+    let splitSms;
+    let response;
     if(!validateSms(req.body.Body)){
-        res.send("")
+        writeResponse('Malformed Response')
+        return
     }
-    
-    
+    splitSms = req.body.Body.split(',')
+    if(splitSms[0] == 'total'){
+        writeResponse(await budgetController.getTotal(splitSms))
+    }
+    else{
+        writeResponse(await entryController.add(splitSms))
+    }
 })
 
-
-console.log(validateSms('test ass,fart,$20,credit'))
-console.log(validateSms('test,xxx,1234,'))
+export 
