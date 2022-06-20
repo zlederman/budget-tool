@@ -1,8 +1,9 @@
 FROM node:latest
 WORKDIR /app
 COPY package*.json ./
+COPY .env ./
 RUN npm install
 COPY . .
-ENV PORT=8888
-EXPOSE 8888
+ENV PORT=80
+EXPOSE 80
 CMD ["node","server.js"]
