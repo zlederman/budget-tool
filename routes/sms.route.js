@@ -39,6 +39,7 @@ const writeResponse = (res,str) =>{
 router.post('/sms',async (req,res)=>{
     let splitSms;
     let response;
+    console.log(req.body)
     if(!validateSms(req.body.Body)){
         writeResponse(res,'Malformed Response')
         return
