@@ -10,21 +10,9 @@ on:
     branches: ['master']
 
 jobs:
-  add_secrets:
-    name: Adds secrets from github 
-    runs-on: ubuntu-latest
-    steps:
-    - name: executing remote ssh commands using password
-      uses: appleboy/ssh-action@master
-      with:
-        host: ${{ secrets.HOST }}
-        username: ${{ secrets.USERNAME }}
-        password: ${{ secrets.PASSWORD }}
-        port: 22
-        script: export USERNAME=${{secrets.DB_USER}} PASS=${{secrets.DB_PASS}}
+  
   push_to_registry:
     name: Push Docker image to Docker Hub
-    needs: add_secrets
     runs-on: ubuntu-latest
     steps:
       - name: Check out the repo
