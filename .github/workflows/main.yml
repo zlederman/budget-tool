@@ -39,6 +39,7 @@ jobs:
 
   update-ssh-linode:
     name: Tell Linode Server To Pull
+    needs: push_to_registry
     runs-on: ubuntu-latest
     steps:
     - name: executing remote ssh commands using password
