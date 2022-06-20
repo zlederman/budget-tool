@@ -1,7 +1,6 @@
 FROM node:latest
 WORKDIR /app
 COPY package*.json ./
-COPY .env ./
 RUN npm install
 COPY . .
 ENV PORT=80
