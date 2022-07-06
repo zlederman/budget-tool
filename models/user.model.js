@@ -1,5 +1,6 @@
-mongoose = require('mongoose')
-userSchema = mongoose.Schema({
+const mongoose = require('mongoose')
+const bcrypt = require('bcrypt')
+const userSchema = mongoose.Schema({
     userName:{
         type:String,
         required:true
@@ -8,7 +9,7 @@ userSchema = mongoose.Schema({
         type:String,
         required:true
     },
-    userPass :{
+    hashedPass :{
         type:String,
         required:true
     }
