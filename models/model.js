@@ -22,7 +22,11 @@ const budgetEntry = new Schema({
     purchaseDate : {
         type: Date,
         default : Date.now()
-    }
+    },
+    // userPhone: {
+    //     type: String,
+    //     required: true,
+    // }
 })
 
 budgetEntry.path('purchaseType').set((v) =>{
