@@ -5,7 +5,9 @@ const jwt = require('jsonwebtoken')
 const bcrypt =require('bcrypt')
 
 userRouter.post('/login', async (req,res)=>{
+    console.log(req.body)
     var user =  await userModel.findOne({phone: req.body.phone}).exec()
+  
     if(!user){
         res.setHeader("Status",401)
         res.send({"message":"failed to login"})

@@ -58,4 +58,4 @@ budgetEntry.methods.confirm = async function confirm(){
 }
 
 
-module.exports = mongoose.model("budgetEntry",budgetEntry)
+module.exports = mongoose.model("budget-sms-table",budgetEntry)

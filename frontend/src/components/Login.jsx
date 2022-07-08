@@ -16,6 +16,7 @@ const Login = (props) => {
     const [pass,setPass] = React.useState()
     const [isAuthed,setIsAuthed] = React.useState(false)
     async function hitLogin(loginObj) {
+        console.log(loginObj)
         fetch("/api/auth/login",{
           method: "POST",
           headers : {
@@ -37,7 +38,7 @@ const Login = (props) => {
         e.preventDefault()
         await hitLogin({
             "phone":phone,
-            "pass": pass
+            "password": pass
         })
 
     }

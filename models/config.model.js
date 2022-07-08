@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 const configSchema = mongoose.Schema({
-    userId: String,
+    userPhone: String,
     paymentMethods:[{
         type: String
     }],
@@ -8,3 +8,4 @@ const configSchema = mongoose.Schema({
         type:String
     }]
 })
+module.exports = mongoose.model("configs-table",configSchema)
