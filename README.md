@@ -1,4 +1,4 @@
-#Budget Buddy
+# Budget Buddy
 ## About
 Budget Buddy is an easy way to record spending and set budgets. I came up with this tool because I was tired of installing apps and having to learn the user interface only to forget about the app a week later. Budget Buddy is one of your contacts, where you can quickly record expenses.
 ## Like this 
