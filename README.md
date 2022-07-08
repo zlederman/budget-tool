@@ -6,4 +6,5 @@ Budget Buddy is an easy way to record spending and set budgets. I came up with t
 ## Set Up
 just configure your budget buddy with purchase-types and purchase-methods and your ready to go!
 
-## 
+## Get Feedback
+You can also configure your budget buddy to send you weekly and monthly updates on your spending 
