@@ -40,8 +40,8 @@ const writeResponse = (res,str) =>{
 router.post('/sms',async (req,res)=>{
     let splitSms;
     let response;
-    // let from = req.body.from
-    console.log(req.body)
+    let from = req.body.From
+
     if(!validateSms(req.body.Body)){
         writeResponse(res,'Malformed Response')
         return
@@ -51,7 +51,7 @@ router.post('/sms',async (req,res)=>{
         response = await budgetController.getTotal(splitSms)
     }
     else{
-        response = await addEntry(splitSms,'3059049510')
+        response = await addEntry(splitSms,from)
     }
     writeResponse(res,response)
 })
