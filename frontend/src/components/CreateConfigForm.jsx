@@ -27,9 +27,6 @@ const LiItem = (props) =>{
 }
 const DynamicTextList = (props) => {
     const context = React.useContext(ConfigContext)
-    const expandListItem = () => {
-        return 
-    }
     return(
         <List>
             {context.data.map((x,idx)=> <LiItem key={x.id}  id={x} idx={idx} />)}
@@ -53,6 +50,15 @@ const FormBlock = (props) => {
 
     )
 }
+
+function postConfig({methods,types,phone}){
+    let payload = {
+        phone: phone,
+        paymentMethods: methods.map(a=> a.text),
+        purchaseTypes: types.map(a=>a.text)
+    }
+}
+
 const ConfigForm = (props) => {
     const [typeItems,setTypes] = React.useState([])
     const [methodItems,setMethods] = React.useState([])
@@ -79,7 +85,7 @@ const ConfigForm = (props) => {
     function changeMethod(obj){
         let methods = [...methodItems]
         methods[obj.idx].text = obj.text
-        setTypes(methods)
+        setMethods(methods)
     }
 
     const contextValue = {
@@ -116,8 +122,6 @@ const ConfigForm = (props) => {
                     <ConfigProvider value={contextValue.types}>
                         <FormBlock
                             onAppend={appendType}
-                            // onDelete={deleteType}
-                            // onChange={changeType}
                             items={typeItems}
                             heading='Add your purchase types'
                             subHeading='e.g. essentials, fun, food'
@@ -133,10 +137,9 @@ const ConfigForm = (props) => {
                             heading='Add your payment methods'
                             subHeading='e.g. credit, debit, cash'
                         />
-                        
                     </ConfigProvider>
                     <Box padding='3'></Box>
-                    <Button colorScheme='teal'>Submit</Button>
+                    <Button colorScheme='teal' onClick={()=>{postConfig({methods:methodItems,types:typeItems})}}>Submit</Button>
                     
                 </Stack>
             </Flex>
