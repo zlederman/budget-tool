@@ -29,6 +29,7 @@ const validateSms = (sms) => {
     return false
 }
 
+
 const writeResponse = (res,str) =>{
     const twiml = new MessagingResponse()
     twiml.message(str);
@@ -39,7 +40,7 @@ const writeResponse = (res,str) =>{
 router.post('/sms',async (req,res)=>{
     let splitSms;
     let response;
-    console.log(req.body)
+    let from = req.body.from
     if(!validateSms(req.body.Body)){
         writeResponse(res,'Malformed Response')
         return
@@ -49,7 +50,7 @@ router.post('/sms',async (req,res)=>{
         response = await budgetController.getTotal(splitSms)
     }
     else{
-        response = await addEntry(splitSms)
+        response = await addEntry(splitSms,from)
     }
     writeResponse(res,response)
 })

@@ -15,8 +15,8 @@ mongoose.connect(uri,{
         .catch((err)=> console.log(err))
 
 app.use(bodyParser.json())
-// app.use('/api/msg',smsRoute)
-app.use('/api/auth',userRoute)
+app.use('/',smsRoute)
+// app.use('/api/auth',userRoute)
 
 http.createServer(app).listen(80,async ()=>{
     console.log('Express is up!')

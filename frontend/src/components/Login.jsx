@@ -16,7 +16,7 @@ const Login = (props) => {
     const [pass,setPass] = React.useState()
     const [isAuthed,setIsAuthed] = React.useState(false)
     async function hitLogin(loginObj) {
-        fetch("/api/login",{
+        fetch("/api/auth/login",{
           method: "POST",
           headers : {
             "Content-Type":"application/json"
