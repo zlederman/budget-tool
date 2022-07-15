@@ -1,2 +1,2 @@
-(cd frontend && source ./frontend/build.sh)
+(cd frontend && source build.sh)
 node server.js
