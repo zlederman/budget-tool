@@ -1,10 +1,13 @@
 const express = require('express')
 const http = require('http')
+const path = require('path')
 const mongoose = require("mongoose");
 const app = express()
 const smsRoute = require('./routes/sms.route')
 const userRoute = require('./routes/user.route')
+const budgetRoute = require('./routes/budget.route')
 const bodyParser = require('body-parser')
+
 require('dotenv').config()
 
 const uri = `mongodb+srv://${process.env.NAME}:${process.env.PASS}@cluster0.kgaoe.mongodb.net/db?retryWrites=true&w=majority`;
@@ -15,8 +18,13 @@ mongoose.connect(uri,{
         .catch((err)=> console.log(err))
 
 app.use(bodyParser.json())
-app.use('/',smsRoute)
+app.use(express.static(path.join(__dirname,'frontend','build')))
+app.get('/',(req,res)=>{
+    res.sendFile(path.join(__dirname,'frontend','build','index.html'))
+})
+app.use('/api/sms',smsRoute)
 // app.use('/api/auth',userRoute)
+app.use('/api/budget',budgetRoute)
 
 http.createServer(app).listen(80,async ()=>{
     console.log('Express is up!')

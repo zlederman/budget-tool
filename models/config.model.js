@@ -1,11 +1,10 @@
 const mongoose = require('mongoose')
+const purchaseSchema = mongoose.Schema({type: String, budget:Number})
 const configSchema = mongoose.Schema({
-    userPhone: String,
+    phone: String,
     paymentMethods:[{
         type: String
     }],
-    purchaseTypes:[{
-        type:String
-    }]
+    purchaseTypes:[purchaseSchema]
 })
 module.exports = mongoose.model("configs-table",configSchema)
