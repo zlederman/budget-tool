@@ -36,10 +36,10 @@ budgetEntry.path('purchaseCost').set((v)=>{
 })
 
 function findType(purchaseType,userTypes){
-    return userTypes.filter((purch)=>{purch.type == purchaseType}).length != 0
+    return userTypes.filter(purch=>purch.type === purchaseType).length != 0
 }
 function findMethod(method,userMethods){
-    return userMethods.filter((meth)=>{meth == method}).length != 0
+    return userMethods.filter(meth=>meth === method).length != 0
 }
 budgetEntry.methods.confirm = async function confirm(){
     
@@ -53,7 +53,7 @@ budgetEntry.methods.confirm = async function confirm(){
     if(!findMethod(this.purchaseMethod,config.paymentMethods)){
         return 'please enter a correct purchase method'
     }
-    return `purchase confirmed\n purchase id: ${this.budgetEntry}`
+    return `purchase confirmed\npurchase id: ${this._id}`
     
 }
 
