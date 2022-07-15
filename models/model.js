@@ -1,5 +1,7 @@
 const mongoose = require("mongoose");
 const userModel = require("./user.model")
+const configModel = require("./config.model");
+const { filter } = require("lodash");
 const Schema = mongoose.Schema;
 const ObjectId = Schema.ObjectId
 
@@ -8,17 +10,12 @@ const budgetEntry = new Schema({
     purchaseName : String,
     purchaseType : {
         type : String,
-        enum : ['investment','fun','accessory','essential','food'],
-        default : 'accessory',
-        message: 'X',
         required : true
     },
     purchaseCost : Number,
     purchaseMethod : {
         type : String,
-        enum : ['debit','credit','cash'],
-        required:  true,
-        message: 'X'
+        required: true
     },
     purchaseDate : {
         type: Date,
@@ -38,24 +35,26 @@ budgetEntry.path('purchaseCost').set((v)=>{
     return parseFloat(v.replace('$',''))
 })
 
-const checkPhone = async (phone) => {
-    let res = await userModel.findOne({phone: phone}).exec()
-    return res != null //returns false if not found
+function findType(purchaseType,userTypes){
+    return userTypes.filter((purch)=>{purch.type == purchaseType}).length != 0
+}
+function findMethod(method,userMethods){
+    return userMethods.filter((meth)=>{meth == method}).length != 0
 }
 budgetEntry.methods.confirm = async function confirm(){
-    if(this.purchaseType == 'X'){ 
-        return 'purchase type not accepted'
-    }
-    if(this.purchaseMethod == 'X'){
-        return 'purchase method not accepted'
-    }
-    if(await !checkPhone(this.userPhone)){
-        return "phone number doesn't exit"
-    }
-    return `you just purchased ${this.purchaseName}`
     
-  
+    let config = await configModel.findOne({phone: this.userPhone}).exec()
+    if(config == null){
+        return 'please create an account at budgetBuddy.dev'
+    }
+    if(!findType(this.purchaseType,config.purchaseTypes)){
+        return 'please enter a correct purchase type'
+    }
+    if(!findMethod(this.purchaseMethod,config.paymentMethods)){
+        return 'please enter a correct purchase method'
+    }
+    return `purchase confirmed\n purchase id: ${this.budgetEntry}`
+    
 }
-
 
 module.exports = mongoose.model("budget-sms-table",budgetEntry)

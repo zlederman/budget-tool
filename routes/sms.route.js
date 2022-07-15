@@ -51,7 +51,11 @@ router.post('/',async (req,res)=>{
         response = await budgetController.getTotal(splitSms)
     }
     else{
-        response = await addEntry(splitSms,from)
+        newEntry = await addEntry(splitSms,from) //creates entry from array
+        response = await newEntry.confirm() 
+        if(response.includes('purchase confirmed')){ //only write if purchase was confirmed
+            await newEntry.save()
+        }
     }
     writeResponse(res,response)
 })

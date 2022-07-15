@@ -12,9 +12,10 @@ const addEntry = async (budgetEntryParams,phone) => {
         purchaseDate : Date.now(),
         userPhone : phone
     })
-    await newEntry.save()
-    return await newEntry.confirm()
+    return newEntry
 }
+    
+     
 
 const sanitizeKeyWord = (keyWord) => {
     return keyWord.toLowerCase().replace(" ","")
