@@ -37,7 +37,7 @@ const writeResponse = (res,str) =>{
     res.end(twiml.toString());
     return
 }
-router.post('/sms',async (req,res)=>{
+router.post('/',async (req,res)=>{
     let splitSms;
     let response;
     let from = req.body.From
