@@ -8,3 +8,6 @@ just configure your budget buddy with purchase-types and purchase-methods and yo
 
 ## Get Feedback
 You can also configure your budget buddy to send you weekly and monthly updates on your spending 
+
+
+## Issues

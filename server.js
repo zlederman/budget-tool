@@ -9,7 +9,7 @@ const addEntry = require('./controllers/sms.controller')
 const budgetRoute = require('./routes/budget.route')
 const budgetModel = require('./models/model')
 const bodyParser = require('body-parser')
-
+const summaryJob = require('./jobs/weekly.job')
 require('dotenv').config()
 
 const uri = `mongodb+srv://${process.env.NAME}:${process.env.PASS}@cluster0.kgaoe.mongodb.net/db?retryWrites=true&w=majority`;
@@ -27,21 +27,8 @@ app.get('/',(req,res)=>{
     res.sendFile(path.join(__dirname,'frontend','build','index.html'))
 })
 app.use('/api/sms',smsRoute)
-// app.use('/api/auth',userRoute)
 app.use('/api/budget',budgetRoute)
-let test = {
-    userPhone:'+13059049510',
-    purchaseName:'aaa',
-    purchaseCost:'300',
-    purchaseType:'essential',
-    purchaseMethod:'cash'
-}
-async function tst(aa){
-    let b = new budgetModel(aa)
-    let c = await b.confirm()
-    console.log(c)
-}
-tst(test)
+summaryJob.start()
 
 http.createServer(app).listen(80,async ()=>{
     console.log('Express is up!')

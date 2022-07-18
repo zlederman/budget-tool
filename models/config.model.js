@@ -1,3 +1,4 @@
+const bodyParser = require('body-parser')
 const mongoose = require('mongoose')
 const purchaseSchema = mongoose.Schema({type: String, budget:Number})
 const configSchema = mongoose.Schema({
@@ -5,6 +6,7 @@ const configSchema = mongoose.Schema({
     paymentMethods:[{
         type: String
     }],
-    purchaseTypes:[purchaseSchema]
+    purchaseTypes:[purchaseSchema],
+    sendSummary: Boolean
 })
 module.exports = mongoose.model("configs-table",configSchema)
