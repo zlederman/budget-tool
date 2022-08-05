@@ -23,7 +23,7 @@ const handleSMS = async ({msg,phone}) => {
         const parsed = parser.parse(msg)
         let command = parsed.cmd
         if(command === 'total'){
-            return await budgetController.getTotal({msgObj:parsed})
+            return await budgetController.getTotal({phone: phone,msgObj:parsed})
         }
         else{
             return await budgetController.addEntry({phone:phone,msgObj:parsed})
@@ -37,7 +37,7 @@ const handleSMS = async ({msg,phone}) => {
 router.post('/',async (req,res)=>{
     let phone= req.body.From
     let msg = req.body.body
-    let res = await handleSMS({phone:phone,msg:msg})
+    let response = await handleSMS({phone:phone,msg:msg})
     writeResponse(res,response)
 })
 
