@@ -4,30 +4,9 @@ const path = require('path');
 const bodyParser = require('body-parser');
 const MessagingResponse = require('twilio').twiml.MessagingResponse
 router.use(bodyParser.urlencoded({ extended: false}));
+const parser = require('../grammar/SMSGrammar')
+const {addEntry,getTotal} = require('../controllers/budget.controller')
 
-const budgetController = require('../controllers/budget.controller')
-const addEntry  = require('../controllers/sms.controller');
-const { write } = require('fs');
-
-const expenseEntryRegex = new RegExp('[\\w]*,[\\w]*,\\$(\\d+|\\d+.\\d+),[\\w]+')
-const totalRequestRegex = new RegExp('total,[\\w]*,[\\w]*')
-
-const validateSms = (sms) => {
-    /*
-     * checks if the string is mal-formed
-     * checks if there are enough params
-    */
-    if(typeof sms == undefined) {
-        return false
-    }
-    if(expenseEntryRegex.test(sms)){
-        return true
-    }
-    if(totalRequestRegex.test(sms)){
-        return true
-    }
-    return false
-}
 
 
 const writeResponse = (res,str) =>{
@@ -37,29 +16,31 @@ const writeResponse = (res,str) =>{
     res.end(twiml.toString());
     return
 }
-router.post('/',async (req,res)=>{
-    let splitSms;
-    let response;
-    let from = req.body.From
 
-    if(!validateSms(req.body.Body)){
-        writeResponse(res,'Malformed Response')
-        return
-    }
-    splitSms = req.body.Body.split(',')
-    if(splitSms[0] == 'total'){
-        response = await budgetController.getTotal(splitSms)
-    }
-    else{
-        newEntry = await addEntry(splitSms,from) //creates entry from array
-        response = await newEntry.confirm() 
-        if(response.includes('purchase confirmed')){ //only write if purchase was confirmed
-            await newEntry.save()
+
+const handleSMS = async ({msg,phone}) => {
+    try{
+        const parsed = parser.parse(msg)
+        let command = parsed.cmd
+        if(command === 'total'){
+            return await budgetController.getTotal({msgObj:parsed})
+        }
+        else{
+            return await budgetController.addEntry({phone:phone,msgObj:parsed})
+        }
+    }catch(err){
+        if(err.hasOwnProperty('location')){
+            return 'Malformed Response'
         }
     }
+}
+router.post('/',async (req,res)=>{
+    let phone= req.body.From
+    let msg = req.body.body
+    let res = await handleSMS({phone:phone,msg:msg})
     writeResponse(res,response)
 })
 
 
 // router.get('/total')
-module.exports = router
+module.exports = {router: router, handleSMS:handleSMS}

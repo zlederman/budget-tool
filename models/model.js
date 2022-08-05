@@ -45,15 +45,24 @@ budgetEntry.methods.confirm = async function confirm(){
     
     let config = await configModel.findOne({phone: this.userPhone}).exec()
     if(config == null){
-        return 'please create an account at budgetBuddy.dev'
+        return {
+            valid: false,
+            msg:'please create an account at budgetBuddy.dev'
+        }
     }
     if(!findType(this.purchaseType,config.purchaseTypes)){
-        return 'please enter a correct purchase type'
+        return {
+            valid: false,
+            msg: `please enter a correct purchase type or\nadd one with add,type,${this.purchaseType}`
+        }
     }
     if(!findMethod(this.purchaseMethod,config.paymentMethods)){
-        return 'please enter a correct purchase method'
+        return {
+            valid: false,
+            msg:  `please enter a correct purchase method\n Or add with add,method,${this.purchaseMethod}`
+        }
     }
-    return `purchase confirmed\npurchase id: ${this._id}`
+    return {valid: true, msg: `purchase confirmed\npurchase id: ${this._id}`}
     
 }
 

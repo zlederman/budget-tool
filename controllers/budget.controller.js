@@ -1,27 +1,20 @@
-const getTotal = async (BudgetObj,ptype,dateRange)=> {
-    let curr = Date.now();
-    let startDate;
-    let cost = 0;
-    if(dateRange == "week"){
-        startDate = new Date(curr);
-        startDate.setDate(startDate.getDate() - 7);
-    }
-    else if(dateRange == "month"){
-        startDate = new Date(curr);
-        startDate.setDate(startDate.getDate() - 30);
-    }
-    else{
-        startdate = 0;
-    }
+const budgetEntryModel = require('../models/model')
+const getTotal = async ({msgObj}) => {
 
-    const funDocs = await BudgetObj.find({
-        purchaseType : ptype,
-        purchaseDate :{$gte: startDate, $lt: curr}
-    });
-    for await (const doc of funDocs) {
-        cost += doc.purchaseCost
-    }
-    return `you spent $${cost} on ${ptype} this ${dateRange}`
 }
-
-module.exports.getTotal = getTotal
+const addEntry = async ({msgObj,phone}) => {
+    const newEntry = new budgetEntryModel({
+        purchaseName : msgObj.cmd, 
+        purchaseType : msgObj.type, //sanitize type enum
+        purchaseCost : msgObj.args[0],
+        purchaseMethod : msgObj.args[1], //sanitize payment method enum
+        purchaseDate : Date.now(),
+        userPhone : phone
+    })
+    const res = await newEntry.confirm()
+    if(res.valid){
+        await newEntry.save()
+    }
+    return res.msg
+}
+module.exports = {getTotal : getTotal, addEntry: addEntry}

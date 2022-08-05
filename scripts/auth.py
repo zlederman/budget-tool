@@ -20,7 +20,7 @@ class AuthEndPointTest(unittest.TestCase):
         fp.close()
     def test_dup_user_sign_up(self):
         '''
-        it should send back a 403 and tell you to f off
+            it should send back a 403 and tell you to f off
         '''
         fp = open(PAYLOAD_PATH,'r')
         raw_auth = json.load(fp)

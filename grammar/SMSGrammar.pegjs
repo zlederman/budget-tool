@@ -1,7 +1,11 @@
 
 SMSCommand  =
 	cmd:Command _ "," _ type:Type _ "," _ args:Arguments {
-	return {cmd:cmd,type:type,args:args}
+	return {
+		cmd:cmd,
+		type:type,
+		args:args
+	}
 }
 Command =
 	cmd:Word

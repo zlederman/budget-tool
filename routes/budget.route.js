@@ -1,3 +1,4 @@
+const { SliderProvider } = require('@chakra-ui/react');
 const express = require('express')
 const budgetInfoRouter = express.Router()
 const configModel = require('../models/config.model')
@@ -26,6 +27,7 @@ budgetInfoRouter.post('/submit-config',async (req,res)=>{
         })
         .then(message => console.log(message.sid))
         .done()
+        await new Promise(r => setTimeout(r, 200));
         client.messages
         .create({
             body:'Tell me what you spent by texting me something like:\nbaked beans,food,$3.00,credit', 
