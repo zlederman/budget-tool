@@ -35,9 +35,11 @@ const handleSMS = async ({msg,phone}) => {
     }
 }
 router.post('/',async (req,res)=>{
+    console.log(`msg received - ${req.body.From} - ${req.body.Body}`)
     let phone= req.body.From
     let msg = req.body.body
     let response = await handleSMS({phone:phone,msg:msg})
+    console.log(`outgoing msg - ${response}`)
     writeResponse(res,response)
 })
 
