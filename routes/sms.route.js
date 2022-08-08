@@ -29,6 +29,7 @@ const handleSMS = async ({msg,phone}) => {
             return await addEntry({phone:phone,msgObj:parsed})
         }
     }catch(err){
+        console.log(err)
         if(err.hasOwnProperty('location')){
             return 'Malformed Response'
         }
