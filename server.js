@@ -4,7 +4,6 @@ const path = require('path')
 const mongoose = require("mongoose");
 const app = express()
 const smsRoute = require('./routes/sms.route')
-const addEntry = require('./controllers/budget.controller')
 const budgetRoute = require('./routes/budget.route')
 const bodyParser = require('body-parser')
 const summaryJob = require('./jobs/weekly.job')
