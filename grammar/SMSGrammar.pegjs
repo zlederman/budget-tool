@@ -1,24 +1,30 @@
 
-SMSCommand  =
-	cmd:Command _ "," _ type:Type _ "," _ args:Arguments {
+Command
+= cmd:Cmd _ "," _ type:Type _ "," args:Argument{
 	return {
-		cmd:cmd,
-		type:type,
-		args:args
+		cmd: cmd,
+        type:type,
+        args:args
 	}
 }
-Command =
-	cmd:Word
-Type = 
-	type:Word
-Arguments =
-	Word _ "," _ args:Arguments 
-    { return [text()]} 
-    / Word
-Word = 
-	wrd:[a-zA-Z0-9 \$\.\+\;]+ {
- 	return wrd.join("").toLowerCase()   
+
+Cmd 
+= cmd:Word {
+	return cmd
 }
+Type 
+= type:Word 
+Word
+= word:[a-zA-Z0-9\.\$]+ {
+	return word.join("").toLowerCase()
+}
+
+Argument
+=  wrd:Word _ "," _  args:Argument {
+	return [wrd,args]
+}
+
+/ wrd:Word 
+
 _ "whitespace"
   = [ \t\n\r]*
-

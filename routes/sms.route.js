@@ -23,10 +23,10 @@ const handleSMS = async ({msg,phone}) => {
         const parsed = parser.parse(msg)
         let command = parsed.cmd
         if(command === 'total'){
-            return await budgetController.getTotal({phone: phone,msgObj:parsed})
+            return await getTotal({phone: phone,msgObj:parsed})
         }
         else{
-            return await budgetController.addEntry({phone:phone,msgObj:parsed})
+            return await addEntry({phone:phone,msgObj:parsed})
         }
     }catch(err){
         if(err.hasOwnProperty('location')){
@@ -43,4 +43,4 @@ router.post('/',async (req,res)=>{
 
 
 // router.get('/total')
-module.exports = {router: router, handleSMS:handleSMS}
+module.exports = handleSMS
