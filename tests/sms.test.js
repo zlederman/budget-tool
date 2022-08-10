@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 const handleSMS = require('../routes/sms.route')
+const configModel = require('../models/config.model')
 require('dotenv').config(
     {path: '.env'}
 )
@@ -10,12 +11,16 @@ describe('it should handle various csv messages', () => {
             useNewUrlParser: true,
             useUnifiedTopology: true })
 
+        
+        const res = await new configModel({
+
+        })
     })
 
 
  
     test('basic budget entry',async ()=>{
-            const phone = `3059049510`
+            const phone = `+13059049510`
             let res = await handleSMS({
                 msg: 'tacos,food,$35,credit',
                 phone: phone
