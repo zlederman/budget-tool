@@ -10,6 +10,12 @@ const authToken = process.env.TWILIO_AUTH_TOKEN;
 const sender = process.env.SENDER
 const messagingSid = process.env.MESSAGING_SID
 const client = require('twilio')(accountSid, authToken);
+const {
+    getLastMonthDate,
+    getLastWeekDate,
+    prettyPrintObj,
+    getTotalByType,
+} = require('../common/TimeTools')
 
 const uri = `mongodb+srv://${process.env.NAME}:${process.env.PASS}@cluster0.kgaoe.mongodb.net/db?retryWrites=true&w=majority`;
 mongoose.connect(uri,{ 
@@ -35,42 +41,8 @@ const summarize = async () => {
     }
 }
 
-const getLastWeekDate = () => {
-    return Date.now() - 7*1000*60*60*24
-}
-
-const getTotalByType = async (id,template) => {
-    const end = Date.now()
-    const start = getLastWeekDate()
-    const entries = await budgetEntryModel.find({
-        userPhone: id,
-        purchaseDate: {
-            $gte: start,
-            $lt: end
-        }
-    }).exec()
-    total = 0
-    for(let i = 0; i < entries.length; i++){
-        if(await entries.at(i).purchaseType in template){
-            template[entries.at(i).purchaseType] += entries.at(i).purchaseCost
-            total += entries.at(i).purchaseCost
-        }
-        
-    }
-    return {...template,total:total}
-}
-
-const prettyPrintObj = (obj)=>{
-    res = ""
-    for(kv in obj){
-        if(kv !== 'total'){
-            res += `${kv}: $${obj[kv]}\n`
-        }
-    }
-    return res
-}
 const sendSummary = async (id,template) => {
-    let agged = await getTotalByType(id,template)
+    let agged = await getTotalByType(id,template,getLastWeekDate)
     client.messages.create({
         body: `you spent $${agged.total} this week.\nHere's the break down:\n${prettyPrintObj(agged)}`,
         to:id,
@@ -80,4 +52,5 @@ const sendSummary = async (id,template) => {
     .done()
 }
 summarize().then()
+
 module.exports = summaryJob

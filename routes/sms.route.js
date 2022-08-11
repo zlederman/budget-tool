@@ -46,4 +46,4 @@ router.post('/',async (req,res)=>{
 
 
 // router.get('/total')
-module.exports = router
+module.exports = {router, handleSMS}
