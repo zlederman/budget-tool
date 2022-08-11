@@ -15,7 +15,7 @@ Cmd
 Type 
 = type:Word 
 Word
-= word:[a-zA-Z0-9\.\$]+ {
+= word:[a-zA-Z0-9\.\$\*]+ {
 	return word.join("").toLowerCase()
 }
 

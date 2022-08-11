@@ -45,16 +45,33 @@ describe('it should handle various csv messages', () => {
         })
         expect(res).toContain('purchase confirmed')
     })
-
-    test('gets your total for the week',async () => {
+    test('gets all totals for all time',async() => {
         const phone = '+13059049510'
-        const WEEK = 7*1000*60*60*24
+
 
         let res = await handleSMS({
-            msg:'total,food,week',
+            msg:'total,*,*',
             phone:phone
         })
-        expect(res).toContain(`your total from ${Date.now() - WEEK} to ${Date.now()}`)
+        expect(res).toContain(`your requested total for the all-time`)
+    })
+    test('gets your total for all time',async () => {
+        const phone = '+13059049510'
+
+
+        let res = await handleSMS({
+            msg:'total,essentials,*',
+            phone:phone
+        })
+        expect(res).toContain(`your requested total for the all-time`)
+    })
+    test('gets your total for the month',async () => {
+        const phone = '+13059049510'
+        let res = await handleSMS({
+            msg:'total,essentials,month',
+            phone:phone
+        })
+        expect(res).toContain(`your requested total for the month`)
     })
 
     afterAll(async ()=>{

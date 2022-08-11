@@ -153,8 +153,8 @@ function peg$parse(input, options) {
       peg$c3 = function(cmd) {
       	return cmd
       },
-      peg$c4 = /^[a-zA-Z0-9.$]/,
-      peg$c5 = peg$classExpectation([["a", "z"], ["A", "Z"], ["0", "9"], ".", "$"], false, false),
+      peg$c4 = /^[a-zA-Z0-9.$*]/,
+      peg$c5 = peg$classExpectation([["a", "z"], ["A", "Z"], ["0", "9"], ".", "$", "*"], false, false),
       peg$c6 = function(word) {
       	return word.join("").toLowerCase()
       },

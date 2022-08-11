@@ -13,6 +13,9 @@ const getLastWeekDate = () => {
 const getLastMonthDate = () => {
     return Date.now() - MONTH
 }
+const getAllTime = () => {
+    return 0
+}
 const getTotalByType = async (id,template,startFn) => {
     //pass in empty object of users purchase types
     // id is user phone number
@@ -34,14 +37,18 @@ const getTotalByType = async (id,template,startFn) => {
         }
         
     }
-    return {...template,total:total}
+    return {...template}
 }
 
 const prettyPrintObj = (obj)=>{
     res = ""
-    for(kv in obj){
-        if(kv !== 'total'){
-            res += `${kv}: $${obj[kv]}\n`
+    let keys = Object.keys(obj)
+    for(k of keys){
+        if(k === keys.at(-1) ){
+            res += `${k}: $${obj[k]}`
+        }
+        else if(k !== 'total'){
+            res += `${k}: $${obj[k]}\n`
         }
     }
     return res
@@ -50,6 +57,7 @@ const prettyPrintObj = (obj)=>{
 module.exports = {
     getLastMonthDate,
     getLastWeekDate,
+    getAllTime,
     prettyPrintObj,
     getTotalByType,
 }
