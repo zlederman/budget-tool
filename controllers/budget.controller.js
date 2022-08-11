@@ -1,17 +1,59 @@
 const budgetEntryModel = require('../models/model')
 const configModel = require('../models/config.model')
-const { typography } = require('@chakra-ui/react')
+const {
+    getLastMonthDate,
+    getLastWeekDate,
+    prettyPrintObj,
+    getTotalByType,
+    getAllTime
+} = require('../common/TimeTools')
 
-const getTotalHelper = async ({phone,msgObj}) => {
-
+const getTotalHelper = async (phone,msgObj) => {
+    const template = {}
+    let startFn = getAllTime
+    for(typ of msgObj.type){
+        template[typ] = 0
+    }
+    switch(String(msgObj.args)){
+        case "week":
+            console.log("hello")
+            startFn = getLastWeekDate
+            break
+        case "month":
+            startFn = getLastMonthDate
+            break
+        default:
+            startFn = getAllTime
+            break
+    }
+    let totalObj = await getTotalByType(phone,template,startFn)
+    return `your requested total for the ${msgObj.args}\n${prettyPrintObj(totalObj)}`
+}  
+const addToConfig = async ({phone,msgObj}) => {
+    let config = await configModel.findOne({phone,phone}).exec()
+    if(msgObj.purchaseType === "purchasetype"){
+        config.types.push({type:msg.args,budget:0})
+    }
+    if(msgObj.type === "paymentmethod"){
+        config.paymentMethods.push(msgObj.args)
+    }
+    else{
+        return `cannot add field ${msgObj.type} to your config\n
+        try add,purchaseType,<type>or\n
+        add,paymentmethod,<type>
+       `
+    }
+    await config.save()
+    return `${msgObj.type} config added ${msgObj.args}`
 }
-
 const getTotal = async ({phone,msgObj}) => {
     'total,food,<time frame> or total,*,*'
     //get config
+
     let config = await configModel.findOne({phone,phone}).exec()
-    let types = config.map(t=>t.type)
+    let types = config.purchaseTypes.map(t=>t.type)
     //expand wild card
+    
     if(msgObj.type === "*"){
         msgObj.type = config.purchaseTypes
     }
@@ -20,20 +62,18 @@ const getTotal = async ({phone,msgObj}) => {
         if(!match){
             throw new Error(`purchase type does not match any ${types.join(", ")}`)
         }
-    }
-    if(msgObj.args[0] === "*"){
-        msgObj.args[0] = 'all-time'
-    }
-    else{
-        if(msgObj.args[0] !== 'month' ||'week'){
-            throw new Error(`time frame doesn't match month, week, *`)
-        }
+        msgObj.type = match
     }
 
-    
+    if(msgObj.args === "*"){
+        msgObj.args = 'all-time'
+    }
+    else if (msgObj.args !== 'month' && msgObj.args !== "week") {
+        throw new Error(`time frame ${msgObj.args} doesn't match month, week, *`)
+    }
 
-
-
+    let totalStr = await getTotalHelper(phone,msgObj)
+    return totalStr
 }
 
 
@@ -52,4 +92,4 @@ const addEntry = async ({msgObj,phone}) => {
     }
     return res.msg
 }
-module.exports = {getTotal : getTotal, addEntry: addEntry}
+module.exports = {getTotal, addEntry,addToConfig}
