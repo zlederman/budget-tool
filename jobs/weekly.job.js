@@ -3,7 +3,7 @@ const configModel = require('../models/config.model')
 const budgetEntryModel = require('../models/model')
 const mongoose = require('mongoose')
 require('dotenv').config(
-    {path: '../.env'}
+    {path: '.env'}
 )
 const accountSid = process.env.TWILIO_ACCOUNT_SID;
 const authToken = process.env.TWILIO_AUTH_TOKEN;
@@ -43,6 +43,7 @@ const summarize = async () => {
 
 const sendSummary = async (id,template) => {
     let agged = await getTotalByType(id,template,getLastWeekDate)
+    console.log(agged)
     client.messages.create({
         body: `you spent $${agged.total} this week.\nHere's the break down:\n${prettyPrintObj(agged)}`,
         to:id,

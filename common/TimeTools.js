@@ -37,7 +37,7 @@ const getTotalByType = async (id,template,startFn) => {
         }
         
     }
-    return {...template}
+    return {...template,total:total}
 }
 
 const prettyPrintObj = (obj)=>{

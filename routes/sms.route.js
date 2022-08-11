@@ -5,7 +5,7 @@ const bodyParser = require('body-parser');
 const MessagingResponse = require('twilio').twiml.MessagingResponse
 router.use(bodyParser.urlencoded({ extended: false}));
 const parser = require('../grammar/SMSGrammar')
-const {addEntry,getTotal} = require('../controllers/budget.controller')
+const {addEntry,getTotal, addToConfig} = require('../controllers/budget.controller')
 
 
 
@@ -24,6 +24,9 @@ const handleSMS = async ({msg,phone}) => {
         let command = parsed.cmd
         if(command === 'total'){
             return await getTotal({phone: phone,msgObj:parsed})
+        }
+        else if(command === 'add') {
+            return await addToConfig({phone:phone,msgObj:parsed})
         }
         else{
             return await addEntry({phone:phone,msgObj:parsed})

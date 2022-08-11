@@ -29,7 +29,23 @@ const getTotalHelper = async (phone,msgObj) => {
     let totalObj = await getTotalByType(phone,template,startFn)
     return `your requested total for the ${msgObj.args}\n${prettyPrintObj(totalObj)}`
 }  
-
+const addToConfig = async ({phone,msgObj}) => {
+    let config = await configModel.findOne({phone,phone}).exec()
+    if(msgObj.purchaseType === "purchasetype"){
+        config.types.push({type:msg.args,budget:0})
+    }
+    if(msgObj.type === "paymentmethod"){
+        config.paymentMethods.push(msgObj.args)
+    }
+    else{
+        return `cannot add field ${msgObj.type} to your config\n
+        try add,purchaseType,<type>or\n
+        add,paymentmethod,<type>
+       `
+    }
+    await config.save()
+    return `${msgObj.type} config added ${msgObj.args}`
+}
 const getTotal = async ({phone,msgObj}) => {
     'total,food,<time frame> or total,*,*'
     //get config
@@ -76,4 +92,4 @@ const addEntry = async ({msgObj,phone}) => {
     }
     return res.msg
 }
-module.exports = {getTotal : getTotal, addEntry: addEntry}
+module.exports = {getTotal, addEntry,addToConfig}

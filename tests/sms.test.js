@@ -47,8 +47,6 @@ describe('it should handle various csv messages', () => {
     })
     test('gets all totals for all time',async() => {
         const phone = '+13059049510'
-
-
         let res = await handleSMS({
             msg:'total,*,*',
             phone:phone
@@ -72,6 +70,14 @@ describe('it should handle various csv messages', () => {
             phone:phone
         })
         expect(res).toContain(`your requested total for the month`)
+    })
+    test('adds a payment method',async () =>{
+        const phone = '+13059049510'
+        let res = await handleSMS({
+            msg:'add,paymentMethod,beans',
+            phone:phone
+        })
+        expect(res).toContain(`config added`)
     })
 
     afterAll(async ()=>{
