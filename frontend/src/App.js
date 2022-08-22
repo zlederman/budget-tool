@@ -1,15 +1,22 @@
 import './App.css';
 import { useState } from 'react';
 import {ChakraProvider,Spinner,Modal} from "@chakra-ui/react";
-import Login from './components/Login'
 import ConfigForm from './components/CreateConfigForm'
-// import HomePage from './components/HomePage'
+import {
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  ModalCloseButton,
+} from '@chakra-ui/react'
+import SubmitConfirmed from './components/SubmitConfirmed';
 import {Box} from "@chakra-ui/react"
-
+import WelcomeModal from './components/WelcomeModal';
 
 
 function App() {
-  const [token, setToken] = useState()
+  const [submit,setSubmit] = useState(false)
   function postConfig({methods,types,budgets,phone}){
     let purchaseTypes = []
     for(let i = 0; i < types.length;i++){
@@ -30,6 +37,7 @@ function App() {
         },
         body:JSON.stringify(payload)
     })
+    setSubmit(true)
 
   }
 
@@ -37,7 +45,9 @@ function App() {
 
     <ChakraProvider>
       <Box bg="gray.900">
-          <ConfigForm setConfig={postConfig}/>
+        <WelcomeModal/>
+         {!submit &&<ConfigForm setConfig={postConfig}/>}
+         {submit && <SubmitConfirmed/>}
         </Box>
       
  

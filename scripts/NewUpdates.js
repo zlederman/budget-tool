@@ -2,7 +2,7 @@ const configModel = require('../models/config.model')
 const budgetEntryModel = require('../models/model')
 const mongoose = require('mongoose')
 require('dotenv').config(
-    {path: '.env'}
+    {path: '../.env'}
 )
 const accountSid = process.env.TWILIO_ACCOUNT_SID;
 const authToken = process.env.TWILIO_AUTH_TOKEN;
@@ -32,12 +32,17 @@ const messageEveryone = async (messages) => {
             })
             .then(message => console.log(message.sid))
             .done()
-            await new Promise(r => setTimeout(r, 200));
+            await new Promise(r => setTimeout(r, 2000));
         }
+
     }
     
 }
 
 messageEveryone([
-    "Hey budgetBuddie "
-])
+    "Hey budgetBuddy, some new updates have droppped 🥱",
+    "you can now get totals \ntotal,<type|*>,<week|month|*>",
+    "you can now add configurations \nadd,<paymentMethod|purchaseType>,<new>",
+    "Enhanced error checking",
+    "bye 🧙🏽‍♂️"
+]).then()
