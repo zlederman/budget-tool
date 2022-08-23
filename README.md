@@ -13,8 +13,4 @@ Budget buddy will send you a summary of all your spending by category on sunday 
 you can send budget buddy a total request like this `total,food,week` or `total,food,month`
 ### Delete
 Budget Buddy delete is an in-progress feature
-## Get Feedback
-You can also configure your budget buddy to send you weekly and monthly updates on your spending 
 
-
-## Issues
