@@ -31,7 +31,7 @@ const getTotalHelper = async (phone,msgObj) => {
 }  
 const addToConfig = async ({phone,msgObj}) => {
     let config = await configModel.findOne({phone,phone}).exec()
-    if(msgObj.purchaseType === "purchasetype"){
+    if(msgObj.type === "purchasetype"){
         config.types.push({type:msg.args,budget:0})
     }
     if(msgObj.type === "paymentmethod"){
