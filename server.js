@@ -16,6 +16,7 @@ mongoose.connect(uri,{
         .then(()=>console.log('connected'))
         .catch((err)=> console.log(err))
 
+        
 app.use(bodyParser.json())
 app.use(express.static(path.join(__dirname,'frontend','build')))
 
